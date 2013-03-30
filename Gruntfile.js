@@ -43,20 +43,23 @@ module.exports = function(grunt) {
         output: './tmp/dev',
         name: 'dev',
         dev: true,
-        sourceUrls: true
+        sourceUrls: true,
+        plugins: ['component-coffee']
       },
       test_prod: {
         base: './test/fixtures/src',
         output: './tmp/prod',
         name: 'prod',
-        styles: false
+        styles: false,
+        plugins: ['component-coffee']
       },
       test_standalone: {
         base: './test/fixtures/src',
         output: './tmp/standalone',
         name: 'standalone',
         standalone: '$',
-        styles: false
+        styles: false,
+        plugins: ['component-coffee']
       }
     }
   });

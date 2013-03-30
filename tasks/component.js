@@ -26,9 +26,9 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('component', 'component-build for grunt.', function() {
     var self = this;
     var opts = this.data;
-    var name = opts.name || this.target;
-    var dir = path.resolve(opts.base || '');
-    var output = path.resolve(this.data.output);
+    var name = opts.name || this.target || 'build';
+    var dir = path.resolve(opts.dir || opts.base || '');
+    var output = path.resolve(dir, this.data.output || './build');
     var done = this.async();
 
     // The component builder
@@ -76,15 +76,9 @@ module.exports = function(grunt) {
       builder.addLookup(config.paths);
     }
 
-    // Set the config on the builder. We've modified
-    // the original config from the file and this will
-    // override settings during the build
-    builder.conf = config;
-
     if (opts.plugins) {
       opts.plugins.forEach(function(name) {
-        var plugin = require('../plugins/' + name);
-        builder.use(plugin);
+        builder.use(require(name));
       });
     }
 
@@ -95,6 +89,7 @@ module.exports = function(grunt) {
 
     // Build the component
     builder.build(function(err, obj) {
+
       if (err) {
         grunt.log.error(err.message);
         grunt.fatal(err.message);

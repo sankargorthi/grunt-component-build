@@ -10,7 +10,8 @@
     "dep"
   ],
   "scripts": [
-    "index.js"
+    "index.js",
+    "robot.coffee"
   ],
   "styles": [
     "styles.css"

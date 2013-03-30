@@ -1,7 +1,7 @@
 {
   "name": "grunt-component-build",
   "description": "Build and watch Components",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "homepage": "https://github.com/anthonyshort/grunt-component-build",
   "author": {
     "name": "Anthony Short",
@@ -31,16 +31,15 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "coffee-script": "latest",
-    "string-to-js": "latest",
-    "component-builder": "0.6.3"
+    "component-builder": "0.6.5"
   },
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-watch": "~0.2.0",
     "grunt-contrib-jshint": "~0.1.1",
     "grunt-contrib-nodeunit": "~0.1.2",
-    "grunt-contrib-clean": "~0.4.0rc6"
+    "grunt-contrib-clean": "~0.4.0rc6",
+    "component-coffee": "0.1.1"
   },
   "keywords": [
     "gruntplugin",
