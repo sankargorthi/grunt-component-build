@@ -26,9 +26,10 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('component', 'component-build for grunt.', function() {
     var self = this;
     var opts = this.data;
-    var name = opts.name || this.target || 'build';
-    var dir = path.resolve(opts.dir || opts.base || '');
-    var output = path.resolve(dir, this.data.output || './build');
+    var options = this.options();
+    var name = opts.filename || opts.name || 'build';
+    var dir = path.resolve(this.data.base || '');
+    var output = path.resolve(options.out || 'build');
     var done = this.async();
 
     // The component builder
@@ -38,22 +39,22 @@ module.exports = function(grunt) {
     builder.copyAssetsTo(output);
 
     // Prefix urls
-    if (opts.prefix) {
+    if (options.prefix) {
       builder.prefixUrls(opts.prefix);
     }
 
     // Development mode
-    if (opts.dev) {
+    if (options.dev) {
       builder.development();
     }
 
-    if (opts.sourceUrls === true) {
+    if (options.sourceUrls === true) {
       builder.addSourceURLs();
     }
 
     // Ignore component parts
-    if (opts.ignore) {
-      Object.keys(opts.ignore).forEach(function(n) {
+    if (options.ignore) {
+      Object.keys(options.ignore).forEach(function(n) {
         var type = opts.ignore[n];
         builder.ignore(n, type);
       });
@@ -68,6 +69,7 @@ module.exports = function(grunt) {
     // The component config
     var config = require(path.join(dir, 'component.json'));
 
+    // Lookup paths
     if (config.paths) {
       config.paths = config.paths.map(function(p) {
         return path.resolve(dir, p);
@@ -76,15 +78,16 @@ module.exports = function(grunt) {
       builder.addLookup(config.paths);
     }
 
-    if (opts.plugins) {
-      opts.plugins.forEach(function(name) {
+    // Component Plugins
+    if (options.use) {
+      options.use.forEach(function(name) {
         builder.use(require(name));
       });
     }
 
     // Configure hook
-    if (opts.configure) {
-      opts.configure.call(this, builder);
+    if (options.configure) {
+      options.configure.call(this, builder);
     }
 
     // Build the component
@@ -96,13 +99,13 @@ module.exports = function(grunt) {
       }
 
       // Write CSS file
-      if (opts.styles !== false) {
+      if (options.styles !== false) {
         var cssFile = path.join(output, name + '.css');
         grunt.file.write(cssFile, obj.css.trim());
       }
 
       // Write JS file
-      if (opts.scripts !== false) {
+      if (options.scripts !== false) {
         var jsFile = path.join(output, name + '.js');
         if (opts.standalone) {
           // Defines the name of the global variable (window[opts.name]).
